@@ -6,17 +6,38 @@
 #include <SFML/Graphics.hpp>
 #include <unistd.h>
 
+// Constructeur
+Snake::Snake(sf::RenderWindow &window) {
+    srand(std::time(0));
+    Grow();
+    Grow();
+    Grow();
+    Grow();
+}
 
+//Destructeur
 Snake::~Snake() {
 
 }
 
+/* Dessine les elements du serpent
+ *
+ * @params sf::RenderWindow window
+ *
+ * return void
+ */
 void Snake::Draw(sf::RenderWindow &window) {
     for (unsigned int i = 0; i < mSnakes.size(); i++)
         window.draw(mSnakes[i]);
 
 }
 
+/* Choix de la direction du serpent
+ *
+ * @params char direction
+ *
+ * return void
+ */
 void Snake::ChooseDirection(char direction) {
     if (mSnakes.size() > 1)
     {
@@ -29,7 +50,6 @@ void Snake::ChooseDirection(char direction) {
     switch (direction) {
         case 'u':
             mSnakes[0].move(0, -mSpeed);
-            std::cout << mSpeed << std::endl;
             break;
         case 'd':
             mSnakes[0].move(0, mSpeed);
@@ -43,35 +63,12 @@ void Snake::ChooseDirection(char direction) {
         default:
             break;
     }
-    //last_direction = direction;
 }
 
-
-sf::Vector2f Snake::GetPosition() {
-    return mSnakes[0].getPosition();
-}
-
-void Snake::SetPosition(sf::RenderWindow &window) {
-    snake.setPosition(50 * 10, 50 * 3);
-}
-
-float Snake::GetX() {
-    return snake.getPosition().x;
-}
-
-float Snake::GetY() {
-    return snake.getPosition().y;
-}
-
-
-Snake::Snake(sf::RenderWindow &window) {
-    srand(std::time(0));
-    Grow();
-    Grow();
-    Grow();
-    Grow();
-}
-
+/* Fonction permettant que le serpent mange et ajoute les elements
+ *
+ * return void
+ */
 void Snake::Grow() {
     sf::RectangleShape rect;
     rect.setSize(sf::Vector2f(50.0f, 50.0f));
@@ -92,17 +89,20 @@ void Snake::Grow() {
     mSnakes.push_back(rect);
 }
 
-bool Snake::CollisionScreen(float snakeX, float snakeY, int snakeWidth, int snakeHeight, int appleX, int appleY, int appleWidth,
-                      int appleHeight) {
+/* Check les collisions
+ *
+ * @params float snakeX
+ * @params float snakeY
+ * @param  int   appleX
+ * @param  int   appleY
+ *
+ * return bool
+ */
+bool Snake::CollisionScreen(float snakeX, float snakeY, int appleX, int appleY) {
 
     int offset = 5;
 
     return ((snakeX <= appleX + offset) && (snakeX >= appleX - offset)) && ((snakeY <= appleY + offset) && (snakeY >= appleY - offset));
-    /*return (snakeX <= appleX + appleWidth &&
-            snakeX + appleWidth >= appleX &&
-            snakeY <= appleY + appleHeight &&
-            snakeY + appleHeight >= appleY);
-            */
 }
 
 
